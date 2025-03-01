@@ -530,7 +530,7 @@ class _MyHomePageState extends State<MyHomePage> {
   late String emoji2 = "🥰";
   int _selectedIndex1 = -1;
   int _selectedIndex2 = -1;
-  late Image result_image = Image.asset('lib/a.jpg');
+  late Image result_image = Image.network("https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f635/u1f635_u1f422.png");
   // late String errorlog = "szLLL";
 
   void _initimage() {
@@ -572,11 +572,11 @@ class _MyHomePageState extends State<MyHomePage> {
           result_image = Image.network(url);
           return;
         } else {
-          result_image = Image.asset('lib/a.jpg');
+          result_image = Image.network("https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f635/u1f635_u1f422.png");
         }
       }
     } catch (e) {
-      result_image = Image.asset('lib/a.jpg');
+      result_image = Image.network("https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f635/u1f635_u1f422.png");
     }
   }
 
