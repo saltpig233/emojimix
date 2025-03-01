@@ -46,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
   // 控制列表是否显示
   bool _isListVisible = false;
   // 提示文本列表
-  final List<String> _tips = ['这是第一条提示', '这是第二条提示', '这是第三条提示'];
+  final List<String> _tips = ['响应表情的时间可能比较长..', 'Api可以点击下方按钮获取', '路又逢小雨，叶落忆湘伦'];
   // 当前的提示索引
   int _currentTipIndex = 0;
   // 提示栏是否显示
@@ -530,7 +530,7 @@ class _MyHomePageState extends State<MyHomePage> {
   late String emoji2 = "🥰";
   int _selectedIndex1 = -1;
   int _selectedIndex2 = -1;
-  late Image result_image = Image.asset('D:\\Projects\\emojimix\\lib\\a.jpg');
+  late Image result_image = Image.asset('lib/a.jpg');
   // late String errorlog = "szLLL";
 
   void _initimage() {
@@ -572,11 +572,11 @@ class _MyHomePageState extends State<MyHomePage> {
           result_image = Image.network(url);
           return;
         } else {
-          result_image = Image.asset('D:\\Projects\\emojimix\\lib\\a.jpg');
+          result_image = Image.asset('lib/a.jpg');
         }
       }
     } catch (e) {
-      result_image = Image.asset('D:\\Projects\\emojimix\\lib\\a.jpg');
+      result_image = Image.asset('lib/a.jpg');
     }
   }
 
@@ -619,13 +619,13 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 6), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 15), (timer) {
       setState(() {
         _isTipVisible = true;
         _currentTipIndex = (_currentTipIndex + 1) % _tips.length;
       });
       // 5 秒后隐藏提示栏
-      Timer(const Duration(seconds: 3), () {
+      Timer(const Duration(seconds: 5), () {
         setState(() {
           _isTipVisible = false;
         });
