@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:math';
 import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
+import 'package:path_provider/path_provider.dart';
 
 /// 程序入口，运行应用
 void main() {
@@ -526,13 +528,22 @@ class _MyHomePageState extends State<MyHomePage> {
   final String API = "https://www.gstatic.com/android/keyboard/emojikitchen/";
   late List emojiValues = emojis.keys.toList();
   late List emojiKeys = emojis.values.toList();
-  late String emoji1 = "😁";
+  late String emoji1 = "🐢";
   late String emoji2 = "🥰";
   int _selectedIndex1 = -1;
   int _selectedIndex2 = -1;
-  late Image result_image = Image.network("https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f635/u1f635_u1f422.png");
-  // late String errorlog = "szLLL";
+  late Image result_image = Image.network(
+    "https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f635/u1f635_u1f422.png",
+  );
+  bool likered = false;
+  String now_url =
+      "https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f635/u1f635_u1f422.png";
+  String apitip =
+      """https://www.gstatic.com/android/keyboard/emojikitchen/date/emoji1/emoji1_emoji2.png
 
+date: 20201001, 20210218, 20210521, 20210831, 20211115, 20220110, 20220203, 20220406, 20220506
+
+示例 : https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f635/u1f635_u1f422.png""";
   void _initimage() {
     setState(() {
       emoji1 = "🐢";
@@ -570,13 +581,18 @@ class _MyHomePageState extends State<MyHomePage> {
         var response = await http.get(Uri.parse(url));
         if (response.statusCode == 200) {
           result_image = Image.network(url);
+          now_url = url;
           return;
         } else {
-          result_image = Image.network("https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f635/u1f635_u1f422.png");
+          result_image = Image.network(
+            "https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f635/u1f635_u1f422.png",
+          );
         }
       }
     } catch (e) {
-      result_image = Image.network("https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f635/u1f635_u1f422.png");
+      result_image = Image.network(
+        "https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f635/u1f635_u1f422.png",
+      );
     }
   }
 
@@ -645,15 +661,22 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // 获取屏幕宽度
+    double screenWidth = MediaQuery.of(context).size.width;
+    // 预设的基准宽度
+    double baseWidth = 800;
+    // 计算缩放比例
+    double scale = screenWidth / baseWidth;
+
     // 每次调用 setState 时都会重新运行此方法。
     return Scaffold(
       appBar: AppBar(title: Text(widget.title)),
       body: Stack(
         children: [
           Positioned(
-            top: 10,
-            left: 10,
-            right: 10,
+            top: 10 * scale,
+            left: 10 * scale,
+            right: 10 * scale,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -662,12 +685,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: [
                     Text(
                       emoji1,
-                      style: TextStyle(fontSize: 148), // 放大乌龟图标
+                      style: TextStyle(fontSize: 148 * scale), // 放大乌龟图标
                     ),
                     SizedBox(width: 4),
                     Container(
-                      height: 170,
-                      width: 50,
+                      height: 170 * scale,
+                      width: 50 * scale,
                       child: ListView.builder(
                         itemCount: emojis.length,
                         itemBuilder: (context, index) {
@@ -692,7 +715,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               child: Center(
                                 child: Text(
                                   emojiValues[index],
-                                  style: TextStyle(fontSize: 32),
+                                  style: TextStyle(fontSize: 32 * scale),
                                 ),
                               ),
                             ),
@@ -700,12 +723,12 @@ class _MyHomePageState extends State<MyHomePage> {
                         },
                       ),
                     ),
-                    SizedBox(width: 10),
-                    Icon(Icons.add_circle_sharp, size: 32),
-                    SizedBox(width: 10),
+                    SizedBox(width: 10 * scale),
+                    Icon(Icons.add_circle_sharp, size: 32 * scale),
+                    SizedBox(width: 10 * scale),
                     Container(
-                      height: 170,
-                      width: 50,
+                      height: 170 * scale,
+                      width: 50 * scale,
                       child: ListView.builder(
                         itemCount: emojis.length,
                         itemBuilder: (context, index) {
@@ -730,7 +753,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               child: Center(
                                 child: Text(
                                   emojiValues[index],
-                                  style: TextStyle(fontSize: 32),
+                                  style: TextStyle(fontSize: 32 * scale),
                                 ),
                               ),
                             ),
@@ -741,7 +764,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     SizedBox(width: 4),
                     Text(
                       emoji2,
-                      style: TextStyle(fontSize: 148), // 放大乌龟图标
+                      style: TextStyle(fontSize: 148 * scale), // 放大乌龟图标
                     ),
                   ],
                 ),
@@ -749,10 +772,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      margin: const EdgeInsets.all(26),
-                      padding: const EdgeInsets.all(6),
-                      height: 140,
-                      width: 560,
+                      margin: const EdgeInsets.all(20),
+
+                      height: 170 * scale,
+                      width: 600 * scale,
 
                       decoration: BoxDecoration(
                         // 使用渐变背景
@@ -788,39 +811,41 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
 
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           // 左边区域
                           Row(
                             children: [
                               Text(emoji1, style: TextStyle(fontSize: 72)),
-                              SizedBox(width: 36),
-                              Icon(Icons.add, size: 32),
-                              SizedBox(width: 26),
+                              SizedBox(width: 16 * scale),
+                              Icon(Icons.add, size: 32 * scale),
+                              SizedBox(width: 16 * scale),
                               Text(emoji2, style: TextStyle(fontSize: 72)),
-                              SizedBox(width: 36),
+                              SizedBox(width: 16 * scale),
                               Icon(
                                 Icons.keyboard_double_arrow_right_rounded,
-                                size: 32,
+                                size: 32 * scale,
                               ),
                             ],
                           ),
-                          SizedBox(width: 56),
+                          SizedBox(width: 16 * scale),
                           // 分隔线
                           Container(
                             width: 1,
                             height: double.infinity,
                             color: Colors.grey,
                           ),
-                          SizedBox(width: 16),
+                          SizedBox(width: 16 * scale),
                           // 右边区域
                           Container(
-                            width: 120,
-                            height: 120,
+                            width: 120 * scale,
+                            height: 120 * scale,
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.grey),
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            child: Center(child: result_image),
+                            // 显示图片并且设置大小
+                            child: result_image,
                           ),
                         ],
                       ),
@@ -830,8 +855,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 // 新增的工具栏
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 56),
-                  padding: const EdgeInsets.all(6),
-                  width: 360,
+                  width: 360 * scale,
+                  height: 60 * scale,
                   decoration: BoxDecoration(
                     // 使用渐变背景，调整颜色
                     gradient: LinearGradient(
@@ -860,38 +885,95 @@ class _MyHomePageState extends State<MyHomePage> {
                     ],
                   ),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.favorite),
+                        icon:
+                            likered
+                                ? Icon(
+                                  Icons.favorite,
+                                  color: Color.fromRGBO(255, 0, 0, 1),
+                                )
+                                : Icon(Icons.favorite),
                         onPressed: () {
-                          // 这里可以添加爱心图标的点击逻辑
+                          setState(() {
+                            likered = !likered;
+                          });
                         },
                       ),
                       IconButton(
                         icon: const Icon(Icons.download),
-                        onPressed: () {
-                          // 这里可以添加下载图标的点击逻辑
+                        onPressed: () async {
+                          final dio = Dio();
+                          try {
+                            // 获取下载目录
+                            final dir =
+                                await getApplicationDocumentsDirectory();
+
+                            // 从 URL 提取文件名
+                            final fileName = now_url.substring(
+                              now_url.lastIndexOf('/') + 1,
+                            );
+
+                            // 执行下载
+                            await dio.download(
+                              now_url,
+                              '${dir.path}/$fileName', // 保存路径
+                            );
+
+                            // 提示成功
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('图片已保存到 ${dir.path}')),
+                            );
+                          } catch (e) {
+                            // 提示失败
+                            print(e);
+                            ScaffoldMessenger.of(
+                              context,
+                            ).showSnackBar(SnackBar(content: Text('下载失败: $e')));
+                          }
                         },
                       ),
                       IconButton(
                         icon: const Icon(Icons.refresh),
                         onPressed: () {
-                          // 这里可以添加循环图标的点击逻辑
+                          setState(() {
+                            // 随机生成两个 emoji
+                            emoji1 = getRandomEmoji();
+                            emoji2 = getRandomEmoji();
+                            _generateImage();
+                          });
                         },
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          // 这里可以添加 api 按钮的点击逻辑
+                          // 弹出提示框，显示 API 信息
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text('API'),
+                                content: Text(apitip),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('关闭'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
                         },
                         child: const Text('api'),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(height: 36),
+                SizedBox(height: 36 * scale),
                 const Text('❤️Developed By ： SaltPig233 X FilpWind'),
-                SizedBox(height: 16),
+                SizedBox(height: 16 * scale),
                 const Text('If you like this app, please give me a star!'),
                 // Text(errorlog),
               ],
@@ -934,7 +1016,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         _tips[_currentTipIndex],
                         textAlign: TextAlign.left,
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 16 * scale,
                           fontWeight: FontWeight.w300,
                           color: Color.fromARGB(255, 0, 0, 0),
                           letterSpacing: 0.5,
